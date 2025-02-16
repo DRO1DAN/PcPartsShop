@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class Cart
+public partial class Cart : Entity
 {
-    public long Id { get; set; }
-
     public long UserId { get; set; }
 
     public DateTime CreatedAt { get; set; }

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class CartItem
+public partial class CartItem : Entity
 {
-    public long Id { get; set; }
-
     public long CartId { get; set; }
 
     public long ProductId { get; set; }

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class Cpu
+public partial class Cpu : Entity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Series { get; set; } = null!;

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class Case
+public partial class Case : Entity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string FormFactor { get; set; } = null!;

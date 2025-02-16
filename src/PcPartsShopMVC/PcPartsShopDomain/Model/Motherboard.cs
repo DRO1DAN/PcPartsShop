@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class Motherboard
+public partial class Motherboard : Entity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Socket { get; set; } = null!;

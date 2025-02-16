@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class Ram
+public partial class Ram : Entity
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public long Capacity { get; set; }
