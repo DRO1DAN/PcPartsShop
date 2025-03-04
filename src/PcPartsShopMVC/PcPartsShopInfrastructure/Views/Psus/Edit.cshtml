@@ -16,7 +16,6 @@
 
             <input type="hidden" asp-for="ProductId" />
 
-
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" readonly="readonly"/>
@@ -25,7 +24,7 @@
 
             <div class="form-group">
                 <label asp-for="Wattage" class="control-label"></label>
-                <input asp-for="Wattage" class="form-control" type="number"/>
+                <input asp-for="Wattage" class="form-control" type="number" min="0" />
                 <span asp-validation-for="Wattage" class="text-danger"></span>
             </div>
 

@@ -42,7 +42,7 @@
 
             <div class="form-group">
                 <label asp-for="MemorySlotsCount" class="control-label"></label>
-                <input asp-for="MemorySlotsCount" class="form-control" type="number" step="1"/>
+                <input asp-for="MemorySlotsCount" class="form-control" type="number" step="1" min="0" />
                 <span asp-validation-for="MemorySlotsCount" class="text-danger"></span>
             </div>
 
@@ -54,7 +54,7 @@
 
             <div class="form-group">
                 <label asp-for="MaxMemory" class="control-label"></label>
-                <input asp-for="MaxMemory" class="form-control" type="number"/>
+                <input asp-for="MaxMemory" class="form-control" type="number" min="0" />
                 <span asp-validation-for="MaxMemory" class="text-danger"></span>
             </div>
 

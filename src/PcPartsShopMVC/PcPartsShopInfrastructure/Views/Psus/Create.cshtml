@@ -24,7 +24,7 @@
 
             <div class="form-group">
                 <label asp-for="Wattage" class="control-label"></label>
-                <input asp-for="Wattage" class="form-control" type="number"/>
+                <input asp-for="Wattage" class="form-control" type="number" min="0" />
                 <span asp-validation-for="Wattage" class="text-danger"></span>
             </div>
 
@@ -36,7 +36,7 @@
 
             <div class="form-group">
                 <label asp-for="Efficiency" class="control-label"></label>
-                <input asp-for="Efficiency" class="form-control" />
+                <input asp-for="Efficiency" class="form-control"/>
                 <span asp-validation-for="Efficiency" class="text-danger"></span>
             </div>
 
