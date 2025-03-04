@@ -1,0 +1,90 @@
+﻿@model PcPartsShopDomain.Model.Cpu
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Cpu</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Series)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Series)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Generation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Generation)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cores)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cores)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Threads)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Threads)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BaseClock)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BaseClock)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BoostClock)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BoostClock)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cache)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cache)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SupportedMemoryType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SupportedMemoryType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Socket)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Socket)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tdp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tdp)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Product)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Product.Category)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId">Edit</a> |
+    <a asp-action="Index" asp-controller="Products">Back to List</a>
+</div>

@@ -22,7 +22,7 @@ public partial class PcPartsShopContext : DbContext
 
     public virtual DbSet<CartItem> CartItems { get; set; }
 
-    public virtual DbSet<Case> Cases { get; set; }
+    public virtual DbSet<ComputerCase> Cases { get; set; }
 
     public virtual DbSet<Cpu> Cpus { get; set; }
 
@@ -98,7 +98,7 @@ public partial class PcPartsShopContext : DbContext
                 .HasConstraintName("FK_CartItem_Product");
         });
 
-        modelBuilder.Entity<Case>(entity =>
+        modelBuilder.Entity<ComputerCase>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Case__3213E83F66BAE731");
 

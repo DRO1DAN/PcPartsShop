@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PcPartsShopDomain.Model;
 
-public partial class Case : Entity
+public partial class ComputerCase : Entity
 {
     public string Name { get; set; } = null!;
 
