@@ -1,48 +1,34 @@
 ﻿@model PcPartsShopDomain.Model.Ram
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "RAM Details";
 }
 
-<h1>Details</h1>
+<h1 class="mb-3">RAM Details</h1>
 
-<div>
-    <h4>Ram</h4>
+<div class="card shadow p-4">
+    <h4 class="text-primary">@Model.Name</h4>
     <hr />
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Capacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Speed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Speed)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Category)
+        <dt class="col-sm-3">Capacity</dt>
+        <dd class="col-sm-9">@Model.Capacity GB</dd>
+
+        <dt class="col-sm-3">Speed</dt>
+        <dd class="col-sm-9">@Model.Speed MHz</dd>
+
+        <dt class="col-sm-3">Type</dt>
+        <dd class="col-sm-9">@Model.Type</dd>
+
+        <dt class="col-sm-3 text-success fw-bold">Price</dt>
+        <dd class="col-sm-9 text-success fw-bold">
+            @Model.Product.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index" asp-controller="Products">Back to List</a>
+
+    <div class="mt-3">
+        <a asp-action="Index" asp-controller="Products" class="btn btn-secondary">До продуктів</a>
+        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model?.ProductId" class="btn btn-success">Додати до кошика</a>
+        <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId" class="btn btn-warning">Змінити</a>
+    </div>
 </div>

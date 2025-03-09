@@ -1,72 +1,46 @@
 ﻿@model PcPartsShopDomain.Model.Motherboard
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Motherboard Details";
 }
 
-<h1>Details</h1>
+<h1 class="mb-3">Motherboard Details</h1>
 
-<div>
-    <h4>Motherboard</h4>
+<div class="card shadow p-4">
+    <h4 class="text-primary">@Model.Name</h4>
     <hr />
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Socket)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Socket)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Chipset)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Chipset)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FormFactor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FormFactor)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MemorySlotsCount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MemorySlotsCount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MemoryType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MemoryType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxMemory)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxMemory)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PcieVersion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PcieVersion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Category)
+        <dt class="col-sm-3">Socket</dt>
+        <dd class="col-sm-9">@Model.Socket</dd>
+
+        <dt class="col-sm-3">Chipset</dt>
+        <dd class="col-sm-9">@Model.Chipset</dd>
+
+        <dt class="col-sm-3">Form Factor</dt>
+        <dd class="col-sm-9">@Model.FormFactor</dd>
+
+        <dt class="col-sm-3">Memory Slots Count</dt>
+        <dd class="col-sm-9">@Model.MemorySlotsCount</dd>
+
+        <dt class="col-sm-3">Memory Type</dt>
+        <dd class="col-sm-9">@Model.MemoryType</dd>
+
+        <dt class="col-sm-3">Max Memory</dt>
+        <dd class="col-sm-9">@Model.MaxMemory GB</dd>
+
+        <dt class="col-sm-3">PCIe Version</dt>
+        <dd class="col-sm-9">@Model.PcieVersion</dd>
+
+        <dt class="col-sm-3 text-success fw-bold">Price</dt>
+        <dd class="col-sm-9 text-success fw-bold">
+            @Model.Product.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index" asp-controller="Products">Back to List</a>
+
+    <div class="mt-3">
+        <a asp-action="Index" asp-controller="Products" class="btn btn-secondary">До продуктів</a>
+        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model?.ProductId" class="btn btn-success">Додати до кошика</a>
+        <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId" class="btn btn-warning">Змінити</a>
+    </div>
 </div>

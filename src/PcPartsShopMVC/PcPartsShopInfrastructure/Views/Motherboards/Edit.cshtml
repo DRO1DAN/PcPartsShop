@@ -1,82 +1,60 @@
 ﻿@model PcPartsShopDomain.Model.Motherboard
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Motherboard";
 }
 
-<h1>Edit</h1>
+<h1 class="mb-3">Edit Motherboard</h1>
 
-<h4>Motherboard</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="card shadow p-4">
+    <form asp-action="Edit">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ProductId" />
+        <input type="hidden" asp-for="Id" />
 
-            <input type="hidden" asp-for="ProductId" />
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" readonly />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Socket"></label>
+            <input asp-for="Socket" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Socket" class="control-label"></label>
-                <input asp-for="Socket" class="form-control" />
-                <span asp-validation-for="Socket" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Chipset"></label>
+            <input asp-for="Chipset" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Chipset" class="control-label"></label>
-                <input asp-for="Chipset" class="form-control" />
-                <span asp-validation-for="Chipset" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="FormFactor"></label>
+            <input asp-for="FormFactor" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="FormFactor" class="control-label"></label>
-                <input asp-for="FormFactor" class="form-control" />
-                <span asp-validation-for="FormFactor" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="MemorySlotsCount"></label>
+            <input asp-for="MemorySlotsCount" class="form-control" type="number" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="MemorySlotsCount" class="control-label"></label>
-                <input asp-for="MemorySlotsCount" class="form-control" type="number" step="1" min="0" />
-                <span asp-validation-for="MemorySlotsCount" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="MemoryType"></label>
+            <input asp-for="MemoryType" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="MemoryType" class="control-label"></label>
-                <input asp-for="MemoryType" class="form-control" />
-                <span asp-validation-for="MemoryType" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="MaxMemory"></label>
+            <input asp-for="MaxMemory" class="form-control" type="number" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="MaxMemory" class="control-label"></label>
-                <input asp-for="MaxMemory" class="form-control" type="number" min="0" />
-                <span asp-validation-for="MaxMemory" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="PcieVersion"></label>
+            <input asp-for="PcieVersion" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="PcieVersion" class="control-label"></label>
-                <input asp-for="PcieVersion" class="form-control" />
-                <span asp-validation-for="PcieVersion" class="text-danger"></span>
-            </div>
+        <input type="hidden" asp-for="Id" />
 
-            <input type="hidden" asp-for="Id" />
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        <button type="submit" class="btn btn-primary">Save Motherboard</button>
+        <a asp-action="Details" asp-controller="Products" asp-route-id="@Model.ProductId" class="btn btn-secondary">Back to Product</a>
+    </form>
 </div>
-
-<div>
-    <a asp-action="Details" asp-controller="Products" asp-route-id="@Model.ProductId">Повернутись до продукту</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

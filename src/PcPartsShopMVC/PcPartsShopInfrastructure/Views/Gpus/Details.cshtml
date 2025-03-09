@@ -1,84 +1,52 @@
 ﻿@model PcPartsShopDomain.Model.Gpu
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "GPU Details";
 }
 
-<h1>Details</h1>
+<h1 class="mb-3">GPU Details</h1>
 
-<div>
-    <h4>Gpu</h4>
+<div class="card shadow p-4">
+    <h4 class="text-primary">@Model.Name</h4>
     <hr />
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Series)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Series)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Generation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Generation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MemoryAmount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MemoryAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MemoryType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MemoryType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BaseClock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BaseClock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BoostClock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BoostClock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PcieVersion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PcieVersion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PcieCount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PcieCount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tdp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tdp)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Category)
+        <dt class="col-sm-3">Series</dt>
+        <dd class="col-sm-9">@Model.Series</dd>
+
+        <dt class="col-sm-3">Generation</dt>
+        <dd class="col-sm-9">@Model.Generation</dd>
+
+        <dt class="col-sm-3">Memory Amount</dt>
+        <dd class="col-sm-9">@Model.MemoryAmount GB</dd>
+
+        <dt class="col-sm-3">Memory Type</dt>
+        <dd class="col-sm-9">@Model.MemoryType</dd>
+
+        <dt class="col-sm-3">Base Clock</dt>
+        <dd class="col-sm-9">@Model.BaseClock MHz</dd>
+
+        <dt class="col-sm-3">Boost Clock</dt>
+        <dd class="col-sm-9">@Model.BoostClock MHz</dd>
+
+        <dt class="col-sm-3">PCIe Version</dt>
+        <dd class="col-sm-9">@Model.PcieVersion</dd>
+
+        <dt class="col-sm-3">PCIe Count</dt>
+        <dd class="col-sm-9">@Model.PcieCount</dd>
+
+        <dt class="col-sm-3">TDP</dt>
+        <dd class="col-sm-9">@Model.Tdp W</dd>
+
+        <dt class="col-sm-3 text-success fw-bold">Price</dt>
+        <dd class="col-sm-9 text-success fw-bold">
+            @Model.Product.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index" asp-controller="Products">Back to List</a>
+
+    <div class="mt-3">
+        <a asp-action="Index" asp-controller="Products" class="btn btn-secondary">До продуктів</a>
+        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model?.ProductId" class="btn btn-success">Додати до кошика</a>
+        <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId" class="btn btn-warning">Змінити</a>
+    </div>
 </div>

@@ -20,11 +20,30 @@ namespace PcPartsShopInfrastructure.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string category)
         {
-            var pcPartsShopContext = _context.Products.Include(p => p.Brand);
-            return View(await pcPartsShopContext.ToListAsync());
+            var products = from p in _context.Products
+                           .Include(p => p.Brand)
+                           select p;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.Name.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                products = products.Where(p => p.Category == category);
+            }
+
+            ViewData["Categories"] = new List<string>
+            {
+                "CPU", "GPU", "RAM", "Motherboard", "PSU", "Case", "Storage"
+            }.Union(_context.Products.Select(p => p.Category).Distinct()).ToList();
+
+            return View(await products.ToListAsync());
         }
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(long? id)

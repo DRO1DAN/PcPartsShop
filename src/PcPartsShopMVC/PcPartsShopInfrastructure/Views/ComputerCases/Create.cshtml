@@ -1,44 +1,27 @@
 ﻿@model PcPartsShopDomain.Model.ComputerCase
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Computer Case";
 }
 
-<h1>Create</h1>
+<h1 class="mb-4">Create Computer Case</h1>
 
-<h4>ComputerCase</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="card shadow p-4">
+    <form asp-action="Create">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ProductId" />
 
-            <input type="hidden" asp-for="ProductId" />
+        <div class="form-group mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" readonly />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+        <div class="form-group mb-3">
+            <label asp-for="FormFactor"></label>
+            <input asp-for="FormFactor" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="FormFactor" class="control-label"></label>
-                <input asp-for="FormFactor" class="form-control" />
-                <span asp-validation-for="FormFactor" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        <button type="submit" class="btn btn-primary">Create Case</button>
+        <a asp-action="CleanupOrphanedProduct" asp-controller="Products" asp-route-productId="@Model.ProductId" class="btn btn-secondary">Cancel</a>
+    </form>
 </div>
-
-<div>
-    <a asp-action="CleanupOrphanedProduct" asp-controller="Products" asp-route-productId="@Model.ProductId">Скасувати створення</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

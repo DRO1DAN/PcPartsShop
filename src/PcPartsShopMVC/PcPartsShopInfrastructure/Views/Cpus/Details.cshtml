@@ -1,90 +1,55 @@
 ﻿@model PcPartsShopDomain.Model.Cpu
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "CPU Details";
 }
 
-<h1>Details</h1>
+<h1 class="mb-3">CPU Details</h1>
 
-<div>
-    <h4>Cpu</h4>
+<div class="card shadow p-4">
+    <h4 class="text-primary">@Model.Name</h4>
     <hr />
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Series)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Series)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Generation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Generation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cores)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cores)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Threads)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Threads)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BaseClock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BaseClock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BoostClock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BoostClock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cache)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cache)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SupportedMemoryType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SupportedMemoryType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Socket)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Socket)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tdp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tdp)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Category)
+        <dt class="col-sm-3">Series</dt>
+        <dd class="col-sm-9">@Model.Series</dd>
+
+        <dt class="col-sm-3">Generation</dt>
+        <dd class="col-sm-9">@Model.Generation</dd>
+
+        <dt class="col-sm-3">Cores</dt>
+        <dd class="col-sm-9">@Model.Cores</dd>
+
+        <dt class="col-sm-3">Threads</dt>
+        <dd class="col-sm-9">@Model.Threads</dd>
+
+        <dt class="col-sm-3">Base Clock</dt>
+        <dd class="col-sm-9">@Model.BaseClock GHz</dd>
+
+        <dt class="col-sm-3">Boost Clock</dt>
+        <dd class="col-sm-9">@Model.BoostClock GHz</dd>
+
+        <dt class="col-sm-3">Cache</dt>
+        <dd class="col-sm-9">@Model.Cache MB</dd>
+
+        <dt class="col-sm-3">Supported Memory Type</dt>
+        <dd class="col-sm-9">@Model.SupportedMemoryType</dd>
+
+        <dt class="col-sm-3">Socket</dt>
+        <dd class="col-sm-9">@Model.Socket</dd>
+
+        <dt class="col-sm-3">TDP</dt>
+        <dd class="col-sm-9">@Model.Tdp W</dd>
+
+        <dt class="col-sm-3 text-success fw-bold">Price</dt>
+        <dd class="col-sm-9 text-success fw-bold">
+            @Model.Product.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index" asp-controller="Products">Back to List</a>
+
+    <div class="mt-3">
+        <a asp-action="Index" asp-controller="Products" class="btn btn-secondary">До продуктів</a>
+        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model?.ProductId" class="btn btn-success">Додати до кошика</a>
+        <a asp-action="Edit" asp-controller="Products" asp-route-id="@Model?.ProductId" class="btn btn-warning">Змінити</a>
+    </div>
 </div>

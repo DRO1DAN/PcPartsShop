@@ -1,100 +1,73 @@
 ﻿@model PcPartsShopDomain.Model.Cpu
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit CPU";
 }
 
-<h1>Edit</h1>
+<h1 class="mb-4">Edit CPU</h1>
 
-<h4>Cpu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="card shadow p-4">
+    <form asp-action="Edit">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ProductId" />
+        <input type="hidden" asp-for="Id" />
 
-            <input type="hidden" asp-for="ProductId" />
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" readonly />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Series"></label>
+            <input asp-for="Series" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Series" class="control-label"></label>
-                <input asp-for="Series" class="form-control" />
-                <span asp-validation-for="Series" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Generation"></label>
+            <input asp-for="Generation" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Generation" class="control-label"></label>
-                <input asp-for="Generation" class="form-control" />
-                <span asp-validation-for="Generation" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Cores"></label>
+            <input asp-for="Cores" class="form-control" type="number" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Cores" class="control-label"></label>
-                <input asp-for="Cores" class="form-control" type="number" step="1" min="0"/>
-                <span asp-validation-for="Cores" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Threads"></label>
+            <input asp-for="Threads" class="form-control" type="number" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Threads" class="control-label"></label>
-                <input asp-for="Threads" class="form-control" type="number" step="1" min="0"/>
-                <span asp-validation-for="Threads" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="BaseClock"></label>
+            <input asp-for="BaseClock" class="form-control" type="number" step="0.01" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="BaseClock" class="control-label"></label>
-                <input asp-for="BaseClock" class="form-control" type="number" step="0.01" min="0"/>
-                <span asp-validation-for="BaseClock" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="BoostClock"></label>
+            <input asp-for="BoostClock" class="form-control" type="number" step="0.01" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="BoostClock" class="control-label"></label>
-                <input asp-for="BoostClock" class="form-control" type="number" step="0.01" min="0"/>
-                <span asp-validation-for="BoostClock" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Cache"></label>
+            <input asp-for="Cache" class="form-control" type="number" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Cache" class="control-label"></label>
-                <input asp-for="Cache" class="form-control" type="number" min="0"/>
-                <span asp-validation-for="Cache" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="SupportedMemoryType"></label>
+            <input asp-for="SupportedMemoryType" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="SupportedMemoryType" class="control-label"></label>
-                <input asp-for="SupportedMemoryType" class="form-control" />
-                <span asp-validation-for="SupportedMemoryType" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Socket"></label>
+            <input asp-for="Socket" class="form-control" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Socket" class="control-label"></label>
-                <input asp-for="Socket" class="form-control" />
-                <span asp-validation-for="Socket" class="text-danger"></span>
-            </div>
+        <div class="mb-3">
+            <label asp-for="Tdp"></label>
+            <input asp-for="Tdp" class="form-control" type="number" min="0" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Tdp" class="control-label"></label>
-                <input asp-for="Tdp" class="form-control" type="number" min="0"/>
-                <span asp-validation-for="Tdp" class="text-danger"></span>
-            </div>
-
-            <input type="hidden" asp-for="Id" />
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Details" asp-controller="Products" asp-route-id="@Model.ProductId" class="btn btn-secondary">Back to Product</a>
+    </form>
 </div>
-
-<div>
-    <a asp-action="Details" asp-controller="Products" asp-route-id="@Model.ProductId">Повернутись до продукту</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
