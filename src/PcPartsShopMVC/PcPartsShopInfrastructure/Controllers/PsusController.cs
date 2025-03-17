@@ -122,7 +122,7 @@ namespace PcPartsShopInfrastructure.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Cpus.Any(e => e.Id == psu.Id))
+                    if (!_context.Psus.Any(e => e.Id == psu.Id))
                         return NotFound();
                     else
                         throw;

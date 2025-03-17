@@ -29,3 +29,15 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+input[readonly].form-control {
+    background-color: #d6d8db;
+    color: #495057;
+    border: 1px solid #fff;
+}
+
+input[readonly].form-control:focus {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid #fff
+}

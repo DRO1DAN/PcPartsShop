@@ -121,7 +121,7 @@ namespace PcPartsShopInfrastructure.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Cpus.Any(e => e.Id == ram.Id))
+                    if (!_context.Rams.Any(e => e.Id == ram.Id))
                         return NotFound();
                     else
                         throw;

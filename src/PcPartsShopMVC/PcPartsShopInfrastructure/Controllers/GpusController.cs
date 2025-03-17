@@ -124,7 +124,7 @@ namespace PcPartsShopInfrastructure.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Cpus.Any(e => e.Id == gpu.Id))
+                    if (!_context.Gpus.Any(e => e.Id == gpu.Id))
                         return NotFound();
                     else
                         throw;
