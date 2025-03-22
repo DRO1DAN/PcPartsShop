@@ -5,7 +5,7 @@ namespace PcPartsShopDomain.Model;
 
 public partial class Cart : Entity
 {
-    public long UserId { get; set; }
+    public string UserId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
