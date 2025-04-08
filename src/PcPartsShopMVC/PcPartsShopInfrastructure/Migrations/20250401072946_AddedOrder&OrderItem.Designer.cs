@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PcPartsShopInfrastructure;
 
@@ -11,9 +12,11 @@ using PcPartsShopInfrastructure;
 namespace PcPartsShopInfrastructure.Migrations
 {
     [DbContext(typeof(PcPartsShopContext))]
-    partial class PcPartsShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250401072946_AddedOrder&OrderItem")]
+    partial class AddedOrderOrderItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

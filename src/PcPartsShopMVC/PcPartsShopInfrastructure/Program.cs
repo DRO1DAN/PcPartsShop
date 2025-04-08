@@ -64,7 +64,7 @@ app.Run();
 
 async Task CreateRoles(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
 {
-    string[] roleNames = { "Admin", "User" };
+    string[] roleNames = { "SuperAdmin", "Admin", "User" };
 
     foreach (var roleName in roleNames)
     {
@@ -76,20 +76,20 @@ async Task CreateRoles(RoleManager<IdentityRole> roleManager, UserManager<User> 
         }
     }
 
-    var adminUser = await userManager.FindByEmailAsync("admin@example.com");
+    var adminUser = await userManager.FindByEmailAsync("superadmin@example.com");
     if (adminUser == null)
     {
         adminUser = new User
         {
-            UserName = "admin@example.com",
-            Email = "admin@example.com",
-            FirstName = "Admin",
-            LastName = "Admin"
+            UserName = "superadmin@example.com",
+            Email = "superadmin@example.com",
+            FirstName = "SuperAdmin",
+            LastName = "SuperAdmin"
         };
         var createAdminResult = await userManager.CreateAsync(adminUser, "Password1_");
         if (createAdminResult.Succeeded)
         {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+            await userManager.AddToRoleAsync(adminUser, "SuperAdmin");
         }
     }
 }

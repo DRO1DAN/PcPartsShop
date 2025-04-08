@@ -1,41 +1,58 @@
-﻿@using System.Globalization
-@model PcPartsShopDomain.Model.Cart
+﻿@model PcPartsShopDomain.Model.Cart
 
 <h2>Your Cart</h2>
 
-<!-- Cart Table -->
-<table class="table table-striped mt-3">
-    <thead class="table-dark">
-        <tr>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.CartItems)
-        {
+@if (Model.CartItems.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.Product.Name</td>
-                <td>@{item.Price.ToString("C", new CultureInfo("en-US"));}</td>
-                <td>@item.Quantity</td>
-                <td>$@(item.Price * item.Quantity)</td>
-                <td>
-                    <a asp-action="RemoveFromCart" asp-route-cartItemId="@item.Id" class="btn btn-danger"
-                       onclick="return confirm('Are you sure you want to remove this product from your cart?');">Remove</a>
-                </td>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model.CartItems)
+            {
+                <tr>
+                    <td>@cartItem.Product.Name</td>
+                    <td>@cartItem.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))</td>
 
-<!-- Cart Total Section (Optional) -->
-<p><strong>Total: </strong>@Model.CartItems.Sum(ci => ci.Price * ci.Quantity).ToString("C", new CultureInfo("en-US"))</p>
+                    <!-- Quantity Form -->
+                    <td>
+                        <form method="post" asp-action="UpdateCartItemQuantity" asp-controller="Cart" class="d-inline">
+                            <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                            <input type="number" name="quantity" value="@cartItem.Quantity" min="1" class="form-control d-inline" style="width: 80px;" />
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </td>
 
-<!-- Proceed to Checkout -->
-<div class="mt-3">
-    <a href="@Url.Action("Checkout", "Cart")" class="btn btn-success">Proceed to Checkout</a>
-    <a href="@Url.Action("Index", "Products")" class="btn btn-secondary">Back</a>
-</div>
+                    <td>$@(cartItem.Price * cartItem.Quantity)</td>
+
+                    <td>
+                        <a asp-action="RemoveFromCart" asp-route-cartItemId="@cartItem.Id" class="btn btn-danger"
+                           onclick="return confirm('Remove this item?');">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Cart total -->
+    <div class="mt-3">
+        <strong>Total: </strong>
+        @Model.CartItems.Sum(ci => ci.Price * ci.Quantity).ToString("C", new System.Globalization.CultureInfo("en-US"))
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Checkout" class="btn btn-success">Proceed to Checkout</a>
+        <a asp-action="Index" asp-controller="Products" class="btn btn-secondary">Back</a>
+    </div>
+}

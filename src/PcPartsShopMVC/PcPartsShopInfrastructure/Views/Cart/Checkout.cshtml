@@ -1,0 +1,92 @@
+﻿@* Views/Cart/Checkout.cshtml *@
+@model PcPartsShopInfrastructure.Models.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@* Remove TempData check from here. It belongs on the confirmation page. *@
+
+<h3>Your Cart</h3>
+@if (Model.CartItems.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* Loop through CartItemViewModel instances *@
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.ProductName</td> @* Use ProductName from ViewModel *@
+                    <td>$@item.Price.ToString("F2")</td> @* Format price *@
+                    <td>@item.Quantity</td>
+                    <td>$@((item.Price * item.Quantity).ToString("F2"))</td> @* Calculate and format item total *@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end mb-3">
+        @* Add margin bottom *@
+        <strong>Total: $@Model.TotalPrice.ToString("F2")</strong> @* Format total price *@
+    </div>
+
+    <!-- Checkout Form -->
+    <h3>Shipping Information</h3>
+    @* *** Correct the form action to SubmitOrder *** *@
+    <form method="post" asp-action="SubmitOrder" asp-controller="Cart">
+        @* Add AntiForgeryToken for security *@
+        @Html.AntiForgeryToken()
+
+        <div class="form-group mb-3">
+            @* Add margin bottom for spacing *@
+            @* Use Label Tag Helper (points to property in ViewModel) *@
+            <label asp-for="ShippingAddress" class="form-label"></label>
+            @* Use Input Tag Helper (binds to property in ViewModel) *@
+            <input asp-for="ShippingAddress" class="form-control" required />
+            @* Add validation message placeholder *@
+            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" required />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        @* Consider changing button text for clarity *@
+        <button type="submit" class="btn btn-success">Place Order</button>
+    </form>
+}
+else
+{
+    <p>Your cart is empty. Please add items to the cart before proceeding to checkout.</p>
+    @* Optionally show the message from TempData if redirected from Checkout GET action *@
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-warning">@TempData["CartMessage"]</div>
+    }
+}
+
+<div class="mt-3">
+    @* Add margin top for spacing *@
+    <a href="@Url.Action("ViewCart", "Cart")" class="btn btn-secondary">
+        Back to Cart
+    </a>
+</div>
+
+@* Optional: Add section for client-side validation scripts *@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

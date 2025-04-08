@@ -1,0 +1,59 @@
+﻿@model PcPartsShopDomain.Model.Order
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@* Display the success message from TempData *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null) // Also handle potential errors if redirected here
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (Model != null)
+{
+    <p>Thank you for your purchase!</p>
+    <p>Your Order ID: <strong>@Model.Id</strong></p>
+    <p>Order Date: @Model.OrderDate.ToString("g")</p>
+    <p>Total: $@Model.TotalPrice.ToString("F2")</p>
+    <p>Status: @Model.Status</p>
+    <p>Shipping To: @Model.ShippingAddress</p>
+
+    @* Optional: Display ordered items *@
+    @if (Model.OrderItems.Any())
+    {
+        <h4>Order Details:</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td>@item.Product?.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>$@item.Price.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+<a asp-controller="Products" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+@* Add link to Order History page if you have one *@

@@ -9,16 +9,19 @@
 
 <!-- Authorization and Cart Buttons -->
 <div class="mb-3">
+    @* Removed d-flex and gap styling *@
     @if (User.Identity.IsAuthenticated)
     {
-        <a href="@Url.Action("ViewCart", "Cart")" class="btn btn-primary">View Cart</a> @* Action("ViewCart", "Cart")" emptyCart only when not admin *@
-        <form asp-action="Logout" asp-controller="Account" method="post">
+        <a href="@Url.Action("ViewCart", "Cart")" class="btn btn-primary">View Cart</a>
+        @* --- Reverted Logout Form --- *@
+        <form asp-action="Logout" asp-controller="Account" method="post" style="display: inline;">
+            @* Ensure it's inline if needed *@
             <button type="submit" class="btn btn-danger">Logout</button>
         </form>
-
     }
     else
     {
+        @* --- Reverted Login/Register Links --- *@
         <a href="@Url.Action("Login", "Account")" class="btn btn-info">Login</a>
         <a href="@Url.Action("Register", "Account")" class="btn btn-success">Register</a>
     }
@@ -35,13 +38,15 @@
 
         <!-- Category Dropdown -->
         <div class="col-md-4">
+            @* --- Reverted Select Styling --- *@
             <select name="category" class="form-control">
                 <option value="">All Categories</option>
                 @if (ViewData["Categories"] is List<string> categories)
                 {
+                    string selectedCategory = Context.Request.Query["category"];
                     foreach (var category in categories)
                     {
-                        <option value="@category" selected="@(category == Context.Request.Query["category"])">@category</option>
+                        <option value="@category" selected="@(category == selectedCategory)">@category</option>
                     }
                 }
             </select>
@@ -49,19 +54,28 @@
 
         <!-- Filter & Reset Buttons -->
         <div class="col-md-4 d-flex">
+            @* Kept d-flex for button alignment *@
             <button type="submit" class="btn btn-primary me-2">Search</button>
             <a asp-action="Index" class="btn btn-secondary">Reset</a>
         </div>
     </div>
 </form>
 
-<!-- Add New Product (For Admin) -->
-@if (User.IsInRole("Admin"))
-{
-    <p>
+<div class="mb-3 d-flex gap-2">
+    @* Use flexbox and gap for button spacing *@
+    @if (User.IsInRole("Admin")) // Admins (and SuperAdmins) see Add Product
+    {
         <a asp-action="Create" class="btn btn-success">Add Product</a>
-    </p>
-}
+    }
+
+    @* --- ADDED THIS BLOCK for SuperAdmin --- *@
+    @if (User.IsInRole("SuperAdmin")) // Only SuperAdmins see this button
+    {
+        <a asp-controller="Admin" asp-action="UserList" class="btn btn-dark">Manage Users</a> @* Link to Admin/UserList *@
+    }
+    @* --- END OF ADDED BLOCK --- *@
+</div>
+
 
 <!-- Display Product List -->
 <table class="table table-striped mt-3">
@@ -75,21 +89,33 @@
         </tr>
     </thead>
     <tbody>
+        @* --- Removed the !Model.Any() check --- *@
         @foreach (var item in Model)
         {
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Category</td>
-                <td>@item.Price.ToString("C", new CultureInfo("en-US"))</td> <!-- Displays as USD -->
-                <td>@item.Brand?.Name</td>
+                <td>@item.Price.ToString("C", new CultureInfo("en-US"))</td>
+                <td>@(item.Brand?.Name ?? "N/A")</td> @* Keep null check for Brand *@
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">View</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">View</a> @* Added btn-sm for consistency *@
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"
-                           onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning ms-1">Edit</a> @* Added btn-sm and margin *@
+
+                        @* --- Reverted Delete back to simple link (GET) --- *@
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger ms-1"
+                           onclick="return confirm('Are you sure you want to delete product @item.Name?');">Delete</a>
                     }
+                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+                    {
+                        @* Show Add to Cart button for logged-in, non-admin users *@
+                        <form asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-primary ms-1" title="Add to Cart">Add to Cart</button>
+                        </form>
+                    }
+                    @* --- Removed AddToCart examples --- *@
                 </td>
             </tr>
         }

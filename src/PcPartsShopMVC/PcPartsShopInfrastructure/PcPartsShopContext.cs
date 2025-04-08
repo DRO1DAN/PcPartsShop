@@ -38,6 +38,7 @@ public partial class PcPartsShopContext : IdentityDbContext<User>
     public virtual DbSet<Ram> Rams { get; set; }
 
     public virtual DbSet<Storage> Storages { get; set; }
+    public virtual DbSet<Order> Orders { get; set; }
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
 }

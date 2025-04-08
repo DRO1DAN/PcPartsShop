@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PcPartsShopDomain.Model;
+using PcPartsShopInfrastructure.Models;
 
 namespace PcPartsShopInfrastructure.Controllers
 {
@@ -119,5 +120,142 @@ namespace PcPartsShopInfrastructure.Controllers
 
             return RedirectToAction("ViewCart");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product) // Make sure Product data is loaded
+                .FirstOrDefaultAsync(c => c.UserId == user.Id && c.Status == "Active");
+
+            if (cart == null || !cart.CartItems.Any()) // Use .Any() for checking if empty
+            {
+                TempData["CartMessage"] = "Your cart is empty. Please add items before checking out.";
+                return RedirectToAction("ViewCart"); // Redirect if cart is empty
+            }
+
+            // *** Create and Populate the ViewModel ***
+            var viewModel = new CheckoutViewModel
+            {
+                CartItems = cart.CartItems.Select(ci => new CartItemViewModel
+                {
+                    // Map data from CartItem and its related Product to CartItemViewModel
+                    ProductName = ci.Product?.Name ?? "Product Not Found", // Handle potential null product
+                    Price = ci.Price, // Price is on CartItem
+                    Quantity = ci.Quantity
+                }).ToList(),
+                TotalPrice = cart.CartItems.Sum(ci => ci.Price * ci.Quantity)
+                // ShippingAddress and PhoneNumber will be empty initially, to be filled by the user form
+            };
+
+            // Pass the populated ViewModel to the view
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Good! Keep this for security.
+        public async Task<IActionResult> SubmitOrder(string shippingAddress, string phoneNumber) // This signature is okay
+        {
+            // --- Your existing logic ---
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product) // Include product needed for potential future logic, though not strictly needed for order creation itself here
+                .FirstOrDefaultAsync(c => c.UserId == user.Id && c.Status == "Active");
+
+            if (cart == null || !cart.CartItems.Any())
+            {
+                // Maybe add a message indicating the cart was empty upon submission attempt
+                TempData["ErrorMessage"] = "Cannot submit order, your cart is empty.";
+                return RedirectToAction("ViewCart");
+            }
+
+            // Optional: Add validation for the parameters if needed (e.g., check if null/empty)
+            if (string.IsNullOrWhiteSpace(shippingAddress) || string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                // If using parameters, handle validation manually or rely on HTML 'required'
+                // If you switched to using CheckoutViewModel as parameter, ModelState.IsValid would be better here.
+                TempData["ErrorMessage"] = "Shipping Address and Phone Number are required.";
+                // Redirect back to Checkout, potentially repopulating the view model (more complex)
+                // For simplicity now, we'll just redirect to Checkout GET which repopulates from the cart
+                return RedirectToAction("Checkout");
+            }
+
+
+            // *** Consider wrapping order creation in a transaction for atomicity ***
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var order = new Order
+                {
+                    UserId = user.Id,
+                    ShippingAddress = shippingAddress,
+                    PhoneNumber = phoneNumber,
+                    TotalPrice = cart.CartItems.Sum(ci => ci.Price * ci.Quantity),
+                    OrderDate = DateTime.Now,
+                    Status = "Pending"
+                };
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync(); // Save order to get its ID
+
+                foreach (var cartItem in cart.CartItems)
+                {
+                    var orderItem = new OrderItem
+                    {
+                        OrderId = order.Id, // Use the generated order ID
+                        ProductId = cartItem.ProductId,
+                        Quantity = cartItem.Quantity,
+                        Price = cartItem.Price // Use the price stored in the cart item at time of adding
+                    };
+                    _context.OrderItems.Add(orderItem);
+                }
+                await _context.SaveChangesAsync(); // Save order items
+
+                // Update cart status *after* order is successfully saved
+                cart.Status = "Completed";
+                _context.Update(cart);
+                await _context.SaveChangesAsync(); // Save cart status update
+
+                // Commit transaction if all steps succeeded
+                await transaction.CommitAsync();
+
+                TempData["SuccessMessage"] = "Your order has been placed successfully!";
+                return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
+            }
+            catch (Exception ex) // Catch potential exceptions during the process
+            {
+                // Log the exception ex
+                await transaction.RollbackAsync(); // Roll back changes if anything failed
+                TempData["ErrorMessage"] = "There was an error placing your order. Please try again.";
+                // Redirect back to checkout or cart? Checkout might be better.
+                return RedirectToAction("Checkout");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderConfirmation(long orderId)
+        {
+            // Retrieve the order details to display (optional, but good practice)
+            var user = await _userManager.GetUserAsync(User); // Get current user
+            var order = await _context.Orders
+                                    .Include(o => o.OrderItems) // Include items if you want to display them
+                                    .ThenInclude(oi => oi.Product) // Include products for item details
+                                    .FirstOrDefaultAsync(o => o.Id == orderId && o.UserId == user.Id); // IMPORTANT: Ensure the order belongs to the logged-in user
+
+            if (order == null)
+            {
+                // Handle case where order is not found or doesn't belong to the user
+                TempData["ErrorMessage"] = "Order not found.";
+                return RedirectToAction("Index", "Home"); // Or redirect to an orders history page
+            }
+
+            // The TempData["SuccessMessage"] set in SubmitOrder will be available here
+            // You can pass it to the view via ViewBag or just let the view access TempData directly
+
+            return View(order); // Pass the order model to the view
+        }
+
     }
 }
