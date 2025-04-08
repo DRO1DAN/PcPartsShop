@@ -1,45 +1,53 @@
 ﻿@model PcPartsShopInfrastructure.Models.LoginViewModel
+@* Model directive MUST be the very first line *@
 
-<h2>Login</h2>
+@{
+    ViewData["Title"] = "Login"; // Set title for the page
+}
 
-<form method="post" asp-action="Login">
-    <!-- Validation Error Messages -->
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <p>@error.ErrorMessage</p>
-            }
-        </div>
-    }
+<div class="container mt-5"> @* Add container for centering and top margin *@
+    <div class="row justify-content-center"> @* Center the column content horizontally *@
+        <div class="col-md-6"> @* Limit form width on medium screens and up *@
+            <div class="card shadow-sm"> @* Add a card for visual grouping and subtle shadow *@
+                <div class="card-header">
+                    <h2 class="mb-0">@ViewData["Title"]</h2> @* Use card header for title *@
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
 
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+                    <form method="post" asp-action="Login">
+                        @* <<<--- HERE is the START tag *@
 
-    <div class="form-group">
-        <label asp-for="Password" class="control-label"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+                        @* All your input fields (Email, Password) go here *@
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" type="password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
 
-@*     <div class="form-group">
-        <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
-        <label asp-for="RememberMe" class="form-check-label">Remember Me</label>
-    </div> *@
+                        @* Your submit button goes here *@
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                        </div>
 
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+                    </form> @* <<<--- HERE is the REQUIRED END tag. Is it missing? *@
+                </div>
+                <div class="card-footer text-center"> @* Add a card footer for the link *@
+                    <p class="mb-0">Don't have an account? <a asp-action="Register">Register Now</a></p>
+                </div>
+            </div> @* End card *@
+        </div> @* End col-md-6 *@
+    </div> @* End row *@
+</div> @* End container *@
 
-<div>
-    <p>Don't have an account? <a asp-action="Register">Register</a></p>
-</div>
-
+@* This section block MUST be at the top level, not nested *@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    };
+    }
 }

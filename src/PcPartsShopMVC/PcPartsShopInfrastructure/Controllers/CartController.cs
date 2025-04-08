@@ -85,7 +85,7 @@ namespace PcPartsShopInfrastructure.Controllers
                 .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync(c => c.UserId == user.Id && c.Status == "Active");
 
-            if (cart == null)
+            if (cart == null || !cart.CartItems.Any())
             {
                 return View("EmptyCart");
             }

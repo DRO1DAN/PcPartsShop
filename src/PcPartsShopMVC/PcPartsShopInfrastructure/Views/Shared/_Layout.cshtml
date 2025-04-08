@@ -4,16 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PcPartsShopInfrastructure</title>
-    <script type="importmap"></script>
+    @* Removed empty importmap script unless you specifically need it *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PC PARTS SHOP.styles.css" asp-append-version="true" />
-    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> *@
 </head>
-<body>
+@* --- ADDED FLEX CLASSES TO BODY --- *@
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
+                @* Using container-fluid is fine if you want full width navbar *@
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PC PARTS SHOP</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -32,17 +33,21 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    @* --- ADDED flex-grow-1 TO THE MAIN CONTAINER --- *@
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    @* --- ADDED mt-auto and py-3 TO FOOTER --- *@
+    <footer class="border-top footer text-muted mt-auto py-3">
         <div class="container">
-            &copy; 2025 - PcPartsShopInfrastructure - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            © 2025 - PcPartsShopInfrastructure - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
