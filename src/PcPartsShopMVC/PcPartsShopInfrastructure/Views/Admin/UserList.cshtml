@@ -1,108 +1,151 @@
 ﻿@model IEnumerable<PcPartsShopDomain.Model.User>
 @inject UserManager<PcPartsShopDomain.Model.User> UserManager
-@using Microsoft.AspNetCore.Identity @* Keep if needed for other things, though IsInRole check uses UserManager now *@
+@using Microsoft.AspNetCore.Identity
 
 @{
-    ViewData["Title"] = "User Management (SuperAdmin)";
+    ViewData["Title"] = "User Management"; // Slightly cleaner title
     var currentUserId = UserManager.GetUserId(User);
 }
 
-<h2>@ViewData["Title"]</h2>
+@* Wrap content in a container with top margin *@
+<div class="container mt-4">
 
-@* Display TempData Messages *@
-@if (TempData["SuccessMessage"] != null)
-{
-     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
-@if (TempData["InfoMessage"] != null)
-{
-     <div class="alert alert-info">@TempData["InfoMessage"]</div>
-}
+    <h2 class="mb-4">@ViewData["Title"] <span class="badge bg-danger">SuperAdmin Area</span></h2> @* Add margin and emphasis *@
 
+    @* Display TempData Messages with dismissible alerts *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["InfoMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>
-                    @{
-                        bool isUserAdmin = await UserManager.IsInRoleAsync(user, "Admin");
-                        bool isUserSuperAdmin = await UserManager.IsInRoleAsync(user, "SuperAdmin");
-                        var roles = new List<string>();
-                        if (isUserSuperAdmin) { roles.Add("SuperAdmin"); }
-                        if (isUserAdmin && !isUserSuperAdmin) { roles.Add("Admin"); } // Avoid duplicate if SuperAdmin implies Admin visually
-                        if (!roles.Any()) { roles.Add("User"); }
-                    }
-                    @foreach (var role in roles)
-                    {
-                        string badgeClass = role switch
+    @* Add card for better visual structure *@
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">User List</h5> @* Card title *@
+        </div>
+        <div class="card-body p-0">
+            @* Remove card body padding to let table fit edge-to-edge *@
+            <div class="table-responsive">
+                @* Make table scroll horizontally on small screens *@
+                <table class="table table-striped table-hover mb-0 align-middle">
+                    @* Remove bottom margin, add hover effect, vertically align content *@
+                    <thead class="table-dark">
+                        @* Dark header for contrast *@
+                        <tr>
+                            <th scope="col" class="ps-3">Username</th> @* Add padding start *@
+                            <th scope="col">Email</th>
+                            <th scope="col">Roles</th>
+                            <th scope="col" class="text-end pe-3">Actions</th> @* Align header text right, add padding end *@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
                         {
-                            "SuperAdmin" => "bg-danger",
-                            "Admin" => "bg-primary",
-                            _ => "bg-secondary"
-                        };
-                        <span class="badge @badgeClass me-1">@role</span>
-                    }
-                </td>
-                <td>
-                    @* Make Admin Button *@
-                    @if (!isUserAdmin && !isUserSuperAdmin)
-                    {
-                        <form asp-action="MakeAdmin" method="post" style="display:inline;">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-success" title="Promote to Admin">Make Admin</button>
-                        </form>
-                    }
-                    @* Remove Admin Button *@
-                    @if (isUserAdmin && user.Id != currentUserId && !isUserSuperAdmin) // SuperAdmin manages this, don't let them demote other SuperAdmins' 'Admin' role easily this way
-                    {
-                        <form asp-action="RemoveAdmin" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove the Admin role from @user.UserName?');">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-warning" title="Demote from Admin">Remove Admin</button>
-                        </form>
-                    }
-                    @* Delete User Button *@
-                    @if (user.Id != currentUserId && !isUserSuperAdmin)
-                    {
-                        <form asp-action="DeleteUser" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to DELETE user @user.UserName? This cannot be undone.');">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-danger ms-1" title="Delete User">Delete</button>
-                        </form>
-                    }
-                    @if (user.Id == currentUserId)
-                    {
-                        <span class="text-muted ms-1">(Your Account)</span>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                            <tr>
+                                <td class="ps-3">@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @{
+                                        // Logic for determining roles remains the same
+                                        bool isUserAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+                                        bool isUserSuperAdmin = await UserManager.IsInRoleAsync(user, "SuperAdmin");
+                                        var roles = new List<string>();
+                                        if (isUserSuperAdmin) { roles.Add("SuperAdmin"); }
+                                        if (isUserAdmin && !isUserSuperAdmin) { roles.Add("Admin"); }
+                                        if (!roles.Any()) { roles.Add("User"); }
+                                    }
+                                    @foreach (var role in roles)
+                                    {
+                                        string badgeClass = role switch
+                                        {
+                                            "SuperAdmin" => "bg-danger",
+                                            "Admin" => "bg-primary",
+                                            _ => "bg-secondary"
+                                        };
+                                        <span class="badge @badgeClass me-1 fs-6">@role</span> @* Slightly larger font size for badge *@
+                                    }
+                                </td>
+                                <td class="text-end pe-3">
+                                    @* Align actions to the right, add padding end *@
+                                    @* Use Button Group for Actions *@
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="User Actions">
+                                        @* Make Admin Button *@
+                                        @if (!isUserAdmin && !isUserSuperAdmin)
+                                        {
+                                            <form asp-action="MakeAdmin" method="post" class="d-inline">
+                                                @* Keep form, but btn-group handles display *@
+                                                <input type="hidden" name="userId" value="@user.Id" />
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-outline-success" title="Promote to Admin">
+                                                    <i class="fas fa-user-shield me-1"></i> @* Optional Font Awesome icon *@
+                                                    Make Admin
+                                                </button>
+                                            </form>
+                                        }
+                                        @* Remove Admin Button *@
+                                        @if (isUserAdmin && user.Id != currentUserId && !isUserSuperAdmin)
+                                        {
+                                            <form asp-action="RemoveAdmin" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to remove the Admin role from @user.UserName?');">
+                                                <input type="hidden" name="userId" value="@user.Id" />
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-outline-warning" title="Demote from Admin">
+                                                    <i class="fas fa-user-minus me-1"></i> @* Optional Font Awesome icon *@
+                                                    Remove Admin
+                                                </button>
+                                            </form>
+                                        }
+                                        @* Delete User Button *@
+                                        @if (user.Id != currentUserId && !isUserSuperAdmin)
+                                        {
+                                            <form asp-action="DeleteUser" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to DELETE user @user.UserName? This cannot be undone.');">
+                                                <input type="hidden" name="userId" value="@user.Id" />
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-outline-danger" title="Delete User">
+                                                    <i class="fas fa-trash-alt me-1"></i> @* Optional Font Awesome icon *@
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        }
+                                        @* Display indicator for current user without using button group space *@
 
-@* --- ADDED BACK BUTTON --- *@
-<div class="mt-3">
-    @* Add margin-top for spacing *@
-    <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-1"></i> @* Optional: Font Awesome icon *@
-        Back to Products
-    </a>
-</div>
-@* --- END BACK BUTTON --- *@
+                                    </div>
+                                    @if (user.Id == currentUserId)
+                                    {
+                                        <span class="badge bg-info text-dark ms-2">You</span> @* Use a badge for self indicator *@
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div> @* End table-responsive *@
+        </div> @* End card-body *@
+    </div> @* End card *@
+
+    @* Back Button Section *@
+    <div class="mt-4 d-flex justify-content-start">
+        @* Align button left with margin top *@
+        <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> @* Optional: Font Awesome icon *@
+            Back to Products
+        </a>
+    </div>
+
+</div> @* End container *@
