@@ -120,4 +120,85 @@
             </tr>
         }
     </tbody>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h4>Products by Category</h4>
+            <div id="category_chart_div" style="width: 100%; height: 300px; border: 1px solid #ccc;"></div>
+        </div>
+        <div class="col-md-6">
+            <h4>Products by Brand</h4>
+            <div id="brand_chart_div" style="width: 100%; height: 300px; border: 1px solid #ccc;"></div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(loadChartData);
+
+            function loadChartData() {
+                fetchCategoryData();
+                fetchBrandData();
+            }
+
+            async function fetchCategoryData() {
+                try {
+                    const response = await fetch('@Url.Action("GetProductCountByCategory", "Dashboard")');
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const jsonData = await response.json();
+                    drawCategoryChart(jsonData);
+                } catch (error) {
+                    console.error('Error fetching category chart data:', error);
+                    document.getElementById('category_chart_div').innerText = 'Error loading category chart data.';
+                }
+            }
+
+            function drawCategoryChart(jsonData) {
+                 if (!jsonData || !Array.isArray(jsonData) || jsonData.length <= 1) {
+                    document.getElementById('category_chart_div').innerText = 'No category data available to display.';
+                    console.warn("Category chart data missing or empty.");
+                    return;
+                }
+                var data = google.visualization.arrayToDataTable(jsonData);
+                var options = {
+                     title: 'Product Count by Category', pieHole: 0.4, chartArea: { width: '90%', height: '80%' }, legend: { position: 'right', textStyle: { fontSize: 12 } }
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('category_chart_div'));
+                chart.draw(data, options);
+            }
+
+            async function fetchBrandData() {
+                try {
+                    const response = await fetch('@Url.Action("GetProductCountByBrand", "Dashboard")');
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const jsonData = await response.json();
+                    drawBrandChart(jsonData);
+                } catch (error) {
+                    console.error('Error fetching brand chart data:', error);
+                     document.getElementById('brand_chart_div').innerText = 'Error loading brand chart data.';
+                }
+            }
+
+            function drawBrandChart(jsonData) {
+                 if (!jsonData || !Array.isArray(jsonData) || jsonData.length <= 1) {
+                    document.getElementById('brand_chart_div').innerText = 'No brand data available to display.';
+                    console.warn("Brand chart data missing or empty.");
+                    return;
+                }
+                var data = google.visualization.arrayToDataTable(jsonData);
+                var options = {
+                     title: 'Product Count by Brand', chartArea: { width: '70%', height: '80%' }, legend: { position: 'none' }, hAxis: { title: 'Count', minValue: 0 }, vAxis: { title: 'Brand' }, bars: 'horizontal'
+                };
+                 var chart = new google.visualization.BarChart(document.getElementById('brand_chart_div'));
+                chart.draw(data, options);
+            }
+
+            window.addEventListener('resize', loadChartData, false);
+
+        </script>
+    }
+
 </table>
