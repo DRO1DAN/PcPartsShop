@@ -5,7 +5,6 @@ using PcPartsShopInfrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PcPartsShopContext>(option => option.UseSqlServer(
@@ -38,7 +37,6 @@ using (var scope = app.Services.CreateScope())
     CreateRoles(roleManager, userManager).Wait();
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
